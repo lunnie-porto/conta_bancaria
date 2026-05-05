@@ -3,33 +3,22 @@ package conta_bancaria;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import conta_bancaria.controller.ContaController;
 import conta_bancaria.model.ContaCorrente;
 import conta_bancaria.model.ContaPoupanca;
 import conta_bancaria.util.Cores;
 
 public class Menu {
-	
+
 	public static final Scanner leia = new Scanner(System.in);
-	
+
+	private static final ContaController contaController = new ContaController();
+
 	public static void main(String[] args) {
-		
+
+		criarContasTeste();
+
 		int opcao;
-		
-		// Teste da Classe Conta Corrente
-				ContaCorrente cc1 = new ContaCorrente(2, 123, 1, "José da Silva", 0.0f, 1000.0f);
-				cc1.visualizar();
-				cc1.sacar(12000.0f);
-				cc1.visualizar();
-				cc1.depositar(5000.0f);
-				cc1.visualizar();
-				
-		        // Teste da Classe Conta Poupança
-				ContaPoupanca cp1 = new ContaPoupanca(3, 123, 2, "Maria dos Santos", 100000.0f, 15);
-				cp1.visualizar();
-		        cp1.sacar(1000.0f);
-				cp1.visualizar();
-				cp1.depositar(5000.0f);
-				cp1.visualizar();
 
 		while (true) {
 
@@ -54,16 +43,16 @@ public class Menu {
 			System.out.println("***************************************************");
 			System.out.println("Entre com a opção desejada:                        ");
 			System.out.println("                                                   " + Cores.TEXT_RESET);
-			
+
 			try {
-			opcao = leia.nextInt();
-			leia.nextLine();
+				opcao = leia.nextInt();
+				leia.nextLine();
 			} catch (InputMismatchException e) {
 				opcao = -1;
 				System.out.println("\nDigite um número inteiro!");
 				leia.nextLine();
 			}
-			
+
 			if (opcao == 0) {
 				System.out.println(Cores.TEXT_WHITE_BOLD + "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 				sobre();
@@ -73,47 +62,51 @@ public class Menu {
 			switch (opcao) {
 			case 1:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Criar Conta \n\n");
-				
+
+				cadastrarConta();
+
 				keyPress();
 				break;
 			case 2:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Listar todas as Contas\n\n");
-				
+
+				listarContas();
+
 				keyPress();
 				break;
 			case 3:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Consultar dados da Conta - por número\n\n");
-				
+
 				keyPress();
 				break;
 			case 4:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Atualizar dados da Conta\n\n");
-				
+
 				keyPress();
 				break;
 			case 5:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Apagar a Conta\n\n");
-				
+
 				keyPress();
 				break;
 			case 6:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Saque\n\n");
-				
+
 				keyPress();
 				break;
 			case 7:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Depósito\n\n");
-				
+
 				keyPress();
 				break;
 			case 8:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Transferencia entre Contas\n\n");
-				
+
 				keyPress();
 				break;
 			default:
 				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida");
-				
+
 				keyPress();
 				break;
 			}
@@ -128,9 +121,58 @@ public class Menu {
 		System.out.println("https://github.com/lunnie-porto");
 		System.out.println("\n****************************************************");
 	}
-	
+
 	public static void keyPress() {
 		System.out.println(Cores.TEXT_RESET + "\n\nPressione Enter para Continuar...");
 		leia.nextLine();
-}
+	}
+
+	private static void listarContas() {
+
+		contaController.listarTodas();
+
+	}
+
+	private static void cadastrarConta() {
+		
+		System.out.print("Digite o número da Agencia: ");
+		int agencia = leia.nextInt();
+		
+		System.out.print("Digite o nome do Titular: ");
+		leia.skip("\\R");
+		String titular = leia.nextLine();
+		
+		System.out.print("Digite o tipo da conta (1 - CC | 2 - CP): ");
+		int tipo = leia.nextInt();
+		
+		System.out.print("Digite o Saldo inicial da conta: ");
+		float saldo = leia.nextFloat();
+		
+		switch (tipo) {
+		case 1 -> {
+			System.out.println("Digite o limite da conta:");
+			float limite = leia.nextFloat();
+			contaController.cadastrar(new ContaCorrente(contaController.gerarNumero(), agencia, tipo, titular, saldo, limite));
+			}
+		case 2 -> {
+			System.out.println("Digite o dia do aniversario da conta:");
+			int aniversario = leia.nextInt();
+			contaController.cadastrar(new ContaPoupanca(contaController.gerarNumero(), agencia, tipo, titular, saldo, aniversario));
+		}
+		default -> System.out.println(Cores.TEXT_RED_BOLD + "Tipo de de conta inválido!" + Cores.TEXT_RESET);
+		}
+	}
+
+	private static void criarContasTeste() {
+
+		contaController.cadastrar(
+				new ContaCorrente(contaController.gerarNumero(), 123, 1, "João da Silva", 1000.00f, 100.00f));
+		contaController.cadastrar(
+				new ContaCorrente(contaController.gerarNumero(), 456, 1, "Maria dos Santos", 2000.00f, 200.00f));
+		contaController.cadastrar(
+				new ContaPoupanca(contaController.gerarNumero(), 789, 2, "Mariana Hernandez", 10000.00f, 12));
+		contaController.cadastrar(
+				new ContaPoupanca(contaController.gerarNumero(), 123, 2, "Giovanna Giunchetti", 8000.00f, 23));
+	}
+
 }
