@@ -1,5 +1,6 @@
 package conta_bancaria;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import conta_bancaria.model.ContaCorrente;
@@ -53,8 +54,16 @@ public class Menu {
 			System.out.println("***************************************************");
 			System.out.println("Entre com a opção desejada:                        ");
 			System.out.println("                                                   " + Cores.TEXT_RESET);
+			
+			try {
 			opcao = leia.nextInt();
-
+			leia.nextLine();
+			} catch (InputMismatchException e) {
+				opcao = -1;
+				System.out.println("\nDigite um número inteiro!");
+				leia.nextLine();
+			}
+			
 			if (opcao == 0) {
 				System.out.println(Cores.TEXT_WHITE_BOLD + "\nBanco do Brazil com Z - O seu Futuro começa aqui!");
 				sobre();
@@ -64,38 +73,48 @@ public class Menu {
 			switch (opcao) {
 			case 1:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Criar Conta \n\n");
-
+				
+				keyPress();
 				break;
 			case 2:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Listar todas as Contas\n\n");
-
+				
+				keyPress();
 				break;
 			case 3:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Consultar dados da Conta - por número\n\n");
-
+				
+				keyPress();
 				break;
 			case 4:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Atualizar dados da Conta\n\n");
-
+				
+				keyPress();
 				break;
 			case 5:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Apagar a Conta\n\n");
-
+				
+				keyPress();
 				break;
 			case 6:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Saque\n\n");
-
+				
+				keyPress();
 				break;
 			case 7:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Depósito\n\n");
-
+				
+				keyPress();
 				break;
 			case 8:
 				System.out.println(Cores.TEXT_WHITE_BOLD + "Transferencia entre Contas\n\n");
-
+				
+				keyPress();
 				break;
 			default:
 				System.out.println(Cores.TEXT_RED_BOLD + "\nOpção Inválida");
+				
+				keyPress();
 				break;
 			}
 
@@ -109,4 +128,9 @@ public class Menu {
 		System.out.println("https://github.com/lunnie-porto");
 		System.out.println("\n****************************************************");
 	}
+	
+	public static void keyPress() {
+		System.out.println(Cores.TEXT_RESET + "\n\nPressione Enter para Continuar...");
+		leia.nextLine();
+}
 }
